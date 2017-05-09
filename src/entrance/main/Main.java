@@ -16,6 +16,7 @@ import api.reader.nesslab.facade.ApiReaderNesslab;
 import api.reader.nesslab.interfaces.ApiReaderFacade;
 import api.reader.nesslab.utils.OperationUtil;
 import entrance.interfaces.RfidReaderSimulate;
+import entrance.publisher.Publisher;
 
 public class Main {
 
@@ -37,6 +38,8 @@ public class Main {
 //			
 //			
 //			api.executeAction(new ReaderTags());
+		 	Publisher publisher = new Publisher("http://smartparkingiot.heroku.br/entrance/car");
+		 	publisher.publish(rfid.getJsonRepresentation());
 			System.out.println(rfid.getJsonRepresentation());
 			
 //			while (api.hasResponse()) {
