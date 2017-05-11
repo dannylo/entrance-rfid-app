@@ -1,13 +1,13 @@
 package entrance.publisher;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import entrance.entity.car.Car;
 
@@ -15,16 +15,28 @@ public class Publisher {
 	
 	private RestTemplate restTemplate;
 	private String url;
+	private ObjectMapper objectMapper;
 	
 	public Publisher(String url) {
 		this.url = url;
 		this.restTemplate = new RestTemplate();
 	}
 	
-	public void publish(Car car){
+	private ObjectMapper getObjectMapperInstance() {
+        if (objectMapper == null) {
+            objectMapper = new ObjectMapper();
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        }
+        return objectMapper;
+    }
+	
+	public void publish(Car car) throws JsonProcessingException{
 		HttpHeaders header = new HttpHeaders();
+		
+		String json = getObjectMapperInstance().writeValueAsString(car);
+		
 		header.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<Map<String, String>> requestEntity = new HttpEntity<Map<String, String>>(buildMap(car), header);
+		HttpEntity<String> requestEntity = new HttpEntity<String>(json, header);
 		try {
 			restTemplate.postForLocation(url, requestEntity);
 		} catch (Exception e) {
@@ -32,11 +44,5 @@ public class Publisher {
 		}
 	}
 	
-	public Map<String, String> buildMap(Car car) {
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("field1", String.valueOf(car.getField1()));
-		map.put("api_key", String.valueOf(car.getApiKey()));
-		
-		return map;
-	}
+
 }

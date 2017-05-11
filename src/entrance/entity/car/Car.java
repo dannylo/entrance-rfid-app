@@ -3,10 +3,15 @@ package entrance.entity.car;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 public class Car {
 	
+	@JsonProperty("field1")
 	private String field1;
+	
+	@JsonProperty("api_key")
 	private String apiKey = "NCPY2QYBT8WG3527";
 	
 	public Car(String returnApi) throws JSONException{
@@ -25,11 +30,4 @@ public class Car {
 	public String getApiKey(){
 		return apiKey;
 	}
-
-
-	
-	
-
-	
-
 }
