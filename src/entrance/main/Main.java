@@ -26,14 +26,9 @@ public class Main {
 		try{
 			ApiReaderFacade api = new ApiReaderNesslab("192.168.1.231");
 			
-			api.executeAction(new SetScanTime(0L));
-			api.executeAction(new RequestStatusScanTime());
-			System.out.println(api.getTranslatedResponse());
-			api.executeAction(new DisableBuzzer());		
-			api.executeAction(new SetPowerControl("250"));
-			api.executeAction(new EnableContinueMode());
+			api.defaultConfiguration();
 			
-			api.clearTemporaryMemory(120);//Clean memory of 2 in 2 minutes.
+			api.clearTemporaryMemory(7200);//Clean memory of 2 in 2 hours.
 			
 			
 			api.executeAction(new ReaderTags());
